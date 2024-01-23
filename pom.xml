@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.2</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>com.example</groupId>
+	<artifactId>demo</artifactId>
+	<version>latest</version>
+	<name>demo</name>
+	<description>demo</description>
+
+	<properties>
+		<java.version>21</java.version>
+		<skipTests>true</skipTests>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!--h2database-->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.2.224</version>
+		</dependency>
+
+		<!--HikariCP-->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>5.1.0</version>
+		</dependency>
+
+        <!-- Graaljs-->
+		<dependency>
+			<groupId>org.graalvm.polyglot</groupId>
+			<artifactId>polyglot</artifactId>
+			<version>23.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.graalvm.polyglot</groupId>
+			<artifactId>js</artifactId>
+			<version>23.1.2</version>
+			<type>pom</type>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<configuration>
+					<buildArgs combine.children="append">
+						<buildArg>-march=compatibility</buildArg>
+						<buildArg>--enable-url-protocols=http</buildArg>
+						<buildArg>-H:+AddAllCharsets</buildArg>
+						<buildArg>-Dfile.encoding=UTF-8</buildArg>
+						<buildArg>-Dsun.jnu.encoding=UTF-8</buildArg>
+						<buildArg>-Duser.language=zh_CN</buildArg>
+						<buildArg>-H:+ReportExceptionStackTraces</buildArg>
+					</buildArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includeSystemScope>true</includeSystemScope>
+					<image>
+						<env>
+							<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+							<BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
+								-march=compatibility
+								--enable-url-protocols=http
+								-Dfile.encoding=UTF-8
+								-Dsun.jnu.encoding=UTF-8
+								-H:+AddAllCharsets
+								-Duser.language=zh_CN
+								-H:+ReportExceptionStackTraces
+							</BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
+						</env>
+					</image>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
